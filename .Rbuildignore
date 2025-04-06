@@ -3,3 +3,5 @@
 ^dev$
 ^\.DS_Store
 ^LICENSE\.md$
+^CRAN-SUBMISSION$
+^cran-comments\.md$

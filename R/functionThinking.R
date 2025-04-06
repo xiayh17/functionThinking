@@ -62,14 +62,17 @@ fun.thinking <- function(expr, chat = NULL, system_prompt = NULL,
   if (is.null(system_prompt)) {
     system_prompt <- 'you are the wisdom brain inner a function, need to think
                      about the function and variables, please check all the
-                     elements,
+                     elements, will automatically check the function name,
+                     arguments, and run the correct version code.
                      make things right, you will never include the R class in
                      your answer,
                      you can save everything in rds file, and return the file
                      path,
                      you can choose proper file format, like csv, json, rds,
-    png, pdf by task purpose. you can storage the code in script and R class in
-    Global Environment using proper variable name.'
+    png, pdf by task purpose. you can storage the code in script file and
+    R class in Global Environment using proper variable name if possible run
+    the corrected code. you dont need to ask for the behavior, just do what you
+    need to do.'
     chat$set_system_prompt(system_prompt)
   }
 
@@ -77,6 +80,48 @@ fun.thinking <- function(expr, chat = NULL, system_prompt = NULL,
     original_pro <- chat$get_system_prompt()
     chat$set_system_prompt(paste0(original_pro))
   }
+
+  # Register tools with the chat object
+  # Time
+  chat$register_tool(tool(
+    get_current_time,
+    "Gets the current time in the given time zone.",
+    tz = type_string(
+      "The time zone to get the current time in. Defaults to `\"UTC\"`.",
+      required = FALSE
+    )
+  ))
+
+  # coding
+  chat$register_tool(tool(
+    run_r_string,
+    "Run R code from a string.",
+    code_string = type_string(
+      "A string containing R code to be executed.",
+      required = TRUE
+    )
+  ))
+
+  # documents
+  chat$register_tool(tool(
+    get_help_text,
+    "Get help information for a function or package.",
+    help_string = type_string(
+      "The name of the function or package to get help for. Can be in the form `package:function`.",
+      required = TRUE
+    )
+  ))
+
+  # object
+  chat$register_tool(tool(
+    inspect_object,
+    "Inspect an object and return its structure.",
+    object = type_string(
+      "The object to inspect. Can be any R object.",
+      required = TRUE
+    )
+  ))
+
 
   # Capture the unevaluated expression
   call_expr <- substitute(expr)
@@ -112,19 +157,21 @@ fun.thinking <- function(expr, chat = NULL, system_prompt = NULL,
     return(invisible(result))
   }
 
+  ## message
   ## Check the expression
-  chat$chat(paste0("Analyzing function call: ", deparse(call_expr)))
+  message = paste0("Here is the function call: ", deparse(call_expr))
 
   ## Check functions if applicable
   if(is.call(call_expr)) {
-    chat$chat(paste0("Checking function: ", fun_name))
+    message = paste0(message, "Here is the function: ", fun_name)
 
     ## Check arguments
-    chat$chat(paste0("Checking arguments: ", args_desc))
+    message = paste0(message, "Here is arguments: ", args_desc)
   }
 
   ## Check results
-  chat$chat(paste0("Checking result: ", deparse(substitute(result))))
+  chat$chat(paste0(message, "Here is result: ", deparse(substitute(result))),
+            "run the corrected code if possible, and save the result")
 
   # Return the result
   invisible(result)

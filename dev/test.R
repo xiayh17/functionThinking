@@ -1,3 +1,6 @@
+library(ellmer)
+library(functionThinking)
+
 chat <- chat_deepseek(
   base_url = Sys.getenv("base_url"),
   api_key = Sys.getenv("api_key"),
@@ -7,4 +10,8 @@ chat <- chat_deepseek(
   echo = NULL
 )
 
-fun.thinking((a = mean(1:10)), chat = chat)
+fun.thinking(
+  (
+    a = mean("一到十")
+   ),
+  chat = chat)
