@@ -2,11 +2,11 @@
 # functionThinking
 
 <!-- badges: start -->
-![](https://www.r-pkg.org/badges/version-last-release/r.proxy)
-![](https://cranlogs.r-pkg.org/badges/grand-total/r.proxy)
-![](https://cranlogs.r-pkg.org/badges/last-day/r.proxy)
-![](https://cranlogs.r-pkg.org/badges/last-week/r.proxy)
-![](https://cranlogs.r-pkg.org/badges/r.proxy)
+![](https://www.r-pkg.org/badges/version-last-release/functionThinking)
+![](https://cranlogs.r-pkg.org/badges/grand-total/functionThinking)
+![](https://cranlogs.r-pkg.org/badges/last-day/functionThinking)
+![](https://cranlogs.r-pkg.org/badges/last-week/functionThinking)
+![](https://cranlogs.r-pkg.org/badges/functionThinking)
 <!-- badges: end -->
 
 The goal of functionThinking is to run function with thinking.
