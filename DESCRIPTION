@@ -2,7 +2,7 @@ Package: functionThinking
 Title: Run Function with Thinking
 Version: 0.0.0.9000
 Authors@R: 
-    person("Yonghe", "Xia", , "xiayh17@gmail.com", role = c("aut", "cre"))
+    person("Yonghe", "Xia", "xiayh17@gmail.com", role = c("aut", "cre"))
 Description: Run function with thinking.
 License: MIT + file LICENSE
 Encoding: UTF-8
