@@ -15,3 +15,17 @@ fun.thinking(
     a = mean("一到十")
    ),
   chat = chat)
+
+fun.thinking(
+  (
+    "use ggplot2 package to make visulaztion of `mtcars` dataset."
+  ),
+  chat = chat)
+
+
+fun.thinking(
+  (
+    "画出mtcars数据中，马力与油耗的关系图"
+  ),
+  chat = chat
+)
