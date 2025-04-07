@@ -6,6 +6,8 @@ Authors@R:
 Maintainer: Yonghe Xia <xiayh17@gmail.com>
 Description: Run function with thinking.
 License: MIT + file LICENSE
+URL: https://github.com/xiayh17/functionThinking
+BugReports: https://github.com/xiayh17/functionThinking/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
