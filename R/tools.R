@@ -116,64 +116,93 @@ get_help_text <- function(help_string) {
 #'
 #' @param x The object to inspect.
 #' @param name The name of the object.
+#' @param verbose Logical, whether to print detailed information to console. Default is TRUE.
 #'
 #' @importFrom methods slotNames showClass
 #' @importFrom utils capture.output find help str
+#'
+#' @return Prints a comprehensive analysis of the provided object to the console, including 
+#' its class, type, structure, dimensions, attributes, and additional details for 
+#' special object types like S4 or R6. No return value, called for side effects.
 #'
 #' @export
 #'
 #' @examples
 #' a = c(1,2,3)
 #' res <- inspect_object(a)
-#' cat(res)
-inspect_object <- function(x, name = deparse(substitute(x))) {
-  cat(" Inspecting:", name, "\n")
-
-  cat(" Basic Info\n")
-  cat("  Class     :", paste(class(x), collapse = ", "), "\n")
-  cat("  Type      :", typeof(x), "\n")
-  cat("  Mode      :", mode(x), "\n")
-  cat("  Length    :", length(x), "\n")
-  cat("  Attributes:", paste(names(attributes(x)), collapse = ", "), "\n")
-  cat("  Names     :", paste(names(x), collapse = ", "), "\n\n")
-
+#' 
+#' # Silent mode
+#' inspect_object(a, verbose = FALSE)
+inspect_object <- function(x, name = deparse(substitute(x)), verbose = TRUE) {
+  # Create output as a character vector
+  output <- character()
+  
+  output <- c(output, paste(" Inspecting:", name))
+  
+  output <- c(output, " Basic Info")
+  output <- c(output, paste("  Class     :", paste(class(x), collapse = ", ")))
+  output <- c(output, paste("  Type      :", typeof(x)))
+  output <- c(output, paste("  Mode      :", mode(x)))
+  output <- c(output, paste("  Length    :", length(x)))
+  output <- c(output, paste("  Attributes:", paste(names(attributes(x)), collapse = ", ")))
+  output <- c(output, paste("  Names     :", paste(names(x), collapse = ", ")))
+  output <- c(output, "")
+  
   dims <- dim(x)
   if (!is.null(dims)) {
-    cat("  Dimensions:", paste(dims, collapse = " x "), "\n\n")
+    output <- c(output, paste("  Dimensions:", paste(dims, collapse = " x ")))
+    output <- c(output, "")
   }
-
-  cat(" Structure\n")
-  str(x)
-  cat("\n")
-
-  cat(" Preview (head)\n")
-  try(print(utils::head(x)), silent = TRUE)
-  cat("\n")
-
-  cat(" Summary\n")
-  try(print(summary(x)), silent = TRUE)
-  cat("\n")
-
+  
+  output <- c(output, " Structure")
+  struct_output <- capture.output(str(x))
+  output <- c(output, struct_output)
+  output <- c(output, "")
+  
+  output <- c(output, " Preview (head)")
+  preview <- try(capture.output(print(utils::head(x))), silent = TRUE)
+  if (!inherits(preview, "try-error")) {
+    output <- c(output, preview)
+  }
+  output <- c(output, "")
+  
+  output <- c(output, " Summary")
+  summary_output <- try(capture.output(print(summary(x))), silent = TRUE)
+  if (!inherits(summary_output, "try-error")) {
+    output <- c(output, summary_output)
+  }
+  output <- c(output, "")
+  
   if (isS4(x)) {
-    cat("  S4 Object Detected\n")
-    cat("  Slots     :", paste(slotNames(x), collapse = ", "), "\n")
-    cat("  Class Def :", capture.output(showClass(class(x)))[1], "\n\n")
+    output <- c(output, "  S4 Object Detected")
+    output <- c(output, paste("  Slots     :", paste(slotNames(x), collapse = ", ")))
+    output <- c(output, paste("  Class Def :", capture.output(showClass(class(x)))[1]))
+    output <- c(output, "")
   }
-
+  
   if ("R6" %in% class(x)) {
-    cat(" R6 Object Detected\n")
-    cat(" Methods   :", paste(names(x), collapse = ", "), "\n\n")
+    output <- c(output, " R6 Object Detected")
+    output <- c(output, paste(" Methods   :", paste(names(x), collapse = ", ")))
+    output <- c(output, "")
   }
-
-  cat(" Source Info\n")
+  
+  output <- c(output, " Source Info")
   env <- try(environment(x), silent = TRUE)
   if (!inherits(env, "try-error") && !is.null(env)) {
-    cat("  Environment:", environmentName(env), "\n")
-    cat("  Objects    :", paste(ls(env), collapse = ", "), "\n")
+    output <- c(output, paste("  Environment:", environmentName(env)))
+    output <- c(output, paste("  Objects    :", paste(ls(env), collapse = ", ")))
   }
-
+  
   found <- try(find(name), silent = TRUE)
   if (!inherits(found, "try-error") && length(found) > 0) {
-    cat("  Found In   :", paste(found, collapse = ", "), "\n")
+    output <- c(output, paste("  Found In   :", paste(found, collapse = ", ")))
   }
+  
+  # Only print if verbose is TRUE
+  if (verbose) {
+    message(paste(output, collapse = "\n"))
+  }
+  
+  # Return the output invisibly
+  invisible(output)
 }

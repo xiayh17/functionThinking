@@ -1,10 +1,16 @@
 Package: functionThinking
 Title: Run Function with Thinking
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Yonghe", "Xia", , "xiayh17@gmail.com", role = c("aut", "ctb", "cre"))
 Maintainer: Yonghe Xia <xiayh17@gmail.com>
-Description: Run function with thinking.
+Description: Enhances R function execution by integrating AI-powered analysis 
+    and insights. Captures function calls, arguments, and results, then uses 
+    an AI assistant (via API integration) to analyze execution patterns, 
+    detect potential issues, and provide optimization suggestions. Supports 
+    saving analysis results in various formats (CSV, JSON, RDS, PNG, PDF, RData, etc.) and 
+    includes tools for runtime code evaluation, help documentation access, 
+    and detailed object inspection.
 License: MIT + file LICENSE
 URL: https://github.com/xiayh17/functionThinking
 BugReports: https://github.com/xiayh17/functionThinking/issues

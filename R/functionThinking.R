@@ -157,21 +157,27 @@ fun.thinking <- function(expr, chat = NULL, system_prompt = NULL,
     return(invisible(result))
   }
 
-  ## message
+  ## Build message for AI analysis
+  msg_parts <- character()
+  
   ## Check the expression
-  message = paste0("Here is the function call: ", deparse(call_expr))
+  msg_parts <- c(msg_parts, paste0("Here is the function call: ", deparse(call_expr)))
 
   ## Check functions if applicable
   if(is.call(call_expr)) {
-    message = paste0(message, "Here is the function: ", fun_name)
-
+    msg_parts <- c(msg_parts, paste0("Here is the function: ", fun_name))
     ## Check arguments
-    message = paste0(message, "Here is arguments: ", args_desc)
+    msg_parts <- c(msg_parts, paste0("Here is arguments: ", args_desc))
   }
 
   ## Check results
-  chat$chat(paste0(message, "Here is result: ", deparse(substitute(result))),
-            "run the corrected code if possible, and save the result")
+  msg_parts <- c(msg_parts, paste0("Here is result: ", deparse(substitute(result))))
+  
+  ## Combine message parts with proper line breaks
+  final_message <- paste(msg_parts, collapse = "\n")
+  
+  ## Send to AI assistant
+  chat$chat(final_message, "run the corrected code if possible, and save the result")
 
   # Return the result
   invisible(result)

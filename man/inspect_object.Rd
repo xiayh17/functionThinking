@@ -15,6 +15,11 @@ inspect_object(x, name = deparse(substitute(x)))
 This function takes an object and returns a detailed summary of
 its structure and properties.
 }
+\value{
+Prints a comprehensive analysis of the provided object to the console, including 
+its class, type, structure, dimensions, attributes, and additional details for 
+special object types like S4 or R6. No return value, called for side effects.
+}
 \examples{
 a = c(1,2,3)
 res <- inspect_object(a)
