@@ -78,7 +78,7 @@ fun.thinking <- function(expr, chat = NULL, system_prompt = NULL,
 
   if (!is.null(more_require)) {
     original_pro <- chat$get_system_prompt()
-    chat$set_system_prompt(paste0(original_pro))
+    chat$set_system_prompt(paste0(original_pro, "\n", more_require))
   }
 
   # Register tools with the chat object
@@ -171,7 +171,13 @@ fun.thinking <- function(expr, chat = NULL, system_prompt = NULL,
   }
 
   ## Check results
-  msg_parts <- c(msg_parts, paste0("Here is result: ", deparse(substitute(result))))
+  msg_parts <- c(
+    msg_parts,
+    paste0(
+      "Here is result: ",
+      paste(capture.output(result), collapse = "\n")
+    )
+  )
   
   ## Combine message parts with proper line breaks
   final_message <- paste(msg_parts, collapse = "\n")
